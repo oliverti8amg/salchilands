@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Launcher SalchilandRV2</title>
+  <link rel="icon" href="src/logo.png" type="image/png">
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+    :root {
+      --rojo-neon: #ff003c;
+      --sombra-neon: 0 0 10px #ff003c, 0 0 20px #ff003c, 0 0 40px #ff003c;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0a0a0a;
+      color: white;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+    #logoMC {
+    width: 220px; /* tamaño aumentado */
+    max-width: 95%;
+    margin-bottom: 40px;
+    filter: drop-shadow(0 0 5px #ff003c) drop-shadow(0 0 15px #ff003c);
+    animation: flotar 3s ease-in-out infinite;
+    }
+
+    @keyframes flotar {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    #countdown {
+      font-size: 2.5em;
+      text-shadow: var(--sombra-neon);
+      color: var(--rojo-neon);
+      animation: parpadeo 1.5s infinite;
+      margin-bottom: 40px;
+    }
+    #contenidoFinal {
+  display: none;
+  background: #1a1a1a;
+  padding: 30px;
+  border: 2px solid var(--rojo-neon);
+  border-radius: 15px;
+  max-width: 600px;
+  box-shadow: var(--sombra-neon);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: aparecer 1s ease-out forwards;
+}
+
+#contenidoFinal h2 {
+  color: var(--rojo-neon);
+  text-shadow: var(--sombra-neon);
+  margin-bottom: 15px;
+}
+
+#contenidoFinal p {
+  color: #ccc;
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  line-height: 1.5em;
+}
+
+#descargarBtn {
+  padding: 12px 25px;
+  font-size: 1em;
+  color: white;
+  background-color: transparent;
+  border: 2px solid var(--rojo-neon);
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: var(--sombra-neon);
+  display: inline-block;
+}
+
+    #descargarBtn:hover {
+      background-color: var(--rojo-neon);
+      color: black;
+      box-shadow: 0 0 20px var(--rojo-neon);
+    }
+
+    @keyframes parpadeo {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes aparecer {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,0,60,0.15) 0%, transparent 70%);
+      animation: fondoAnimado 8s linear infinite;
+      z-index: 0;
+    }
+
+    body > * {
+      z-index: 1;
+    }
+
+    @keyframes fondoAnimado {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo del servidor de Minecraft -->
+  <img id="logoMC" src="./src/logo.png" alt="Logo del servidor">
+
+  <!-- Cuenta atrás -->
+  <div id="countdown">Cuenta atrás: calculando...</div>
+
+  <!-- Contenido final con botón de descarga -->
+  <div id="contenidoFinal">
+    <h3>¡Ha llegado el momento!</h3>
+    <p>Ahora puedes descargar el launcher del servidor:</p>
+    <a id="descargarBtn" href="https://cdn.discordapp.com/attachments/1289700942316441700/1385733941897728010/instaladorsalchilandrv.exe?ex=685724cd&is=6855d34d&hm=8ef6901a6a39a6c4cf5e2ef9defdd69cccacbe88a745b0b8e21499802a352b12&" download>Descargar</a>
+  </div>
+
+  <script>
+    const DateTime = luxon.DateTime;
+
+    const fechaObjetivo = DateTime.fromObject({
+      year: 2025,
+      month: 6,
+      day: 20,
+      hour: 23,
+      minute: 33
+    }, { zone: 'Europe/Madrid' });
+
+    const countdownEl = document.getElementById("countdown");
+    const contenidoFinalEl = document.getElementById("contenidoFinal");
+
+    function actualizarCuentaAtras() {
+      const ahora = DateTime.now().setZone('Europe/Madrid');
+      const diferencia = fechaObjetivo.diff(ahora, ['days', 'hours', 'minutes', 'seconds']);
+
+      if (diferencia.toMillis() <= 0) {
+        countdownEl.style.display = "none";
+        contenidoFinalEl.style.display = "block";
+        contenidoFinalEl.style.animation = "aparecer 1s ease-out forwards";
+        clearInterval(intervalo);
+        return;
+      }
+
+      const dias = Math.floor(diferencia.days);
+      const horas = Math.floor(diferencia.hours);
+      const minutos = Math.floor(diferencia.minutes);
+      const segundos = Math.floor(diferencia.seconds);
+
+      countdownEl.innerHTML = `Faltan ${dias} días, ${horas} horas, ${minutos} minutos y ${segundos} segundos.`;
+    }
+
+    const intervalo = setInterval(actualizarCuentaAtras, 1000);
+    actualizarCuentaAtras();
+  </script>
+
+</body>
+</html>
