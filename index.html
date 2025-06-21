@@ -31,12 +31,13 @@
       overflow: hidden;
       text-align: center;
     }
+
     #logoMC {
-    width: 220px; /* tamaño aumentado */
-    max-width: 95%;
-    margin-bottom: 40px;
-    filter: drop-shadow(0 0 5px #ff003c) drop-shadow(0 0 15px #ff003c);
-    animation: flotar 3s ease-in-out infinite;
+      width: 220px;
+      max-width: 95%;
+      margin-bottom: 40px;
+      filter: drop-shadow(0 0 5px #ff003c) drop-shadow(0 0 15px #ff003c);
+      animation: flotar 3s ease-in-out infinite;
     }
 
     @keyframes flotar {
@@ -51,45 +52,47 @@
       animation: parpadeo 1.5s infinite;
       margin-bottom: 40px;
     }
+
     #contenidoFinal {
-  display: none;
-  background: #1a1a1a;
-  padding: 30px;
-  border: 2px solid var(--rojo-neon);
-  border-radius: 15px;
-  max-width: 600px;
-  box-shadow: var(--sombra-neon);
-  opacity: 0;
-  transform: translateY(20px);
-  animation: aparecer 1s ease-out forwards;
-}
+      display: none;
+      background: #1a1a1a;
+      padding: 30px;
+      border: 2px solid var(--rojo-neon);
+      border-radius: 15px;
+      max-width: 600px;
+      box-shadow: var(--sombra-neon);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: aparecer 1s ease-out forwards;
+    }
 
-#contenidoFinal h2 {
-  color: var(--rojo-neon);
-  text-shadow: var(--sombra-neon);
-  margin-bottom: 15px;
-}
+    #contenidoFinal h2,
+    #contenidoFinal h3 {
+      color: var(--rojo-neon);
+      text-shadow: var(--sombra-neon);
+      margin-bottom: 15px;
+    }
 
-#contenidoFinal p {
-  color: #ccc;
-  margin-bottom: 20px;
-  font-size: 1.1em;
-  line-height: 1.5em;
-}
+    #contenidoFinal p {
+      color: #ccc;
+      margin-bottom: 20px;
+      font-size: 1.1em;
+      line-height: 1.5em;
+    }
 
-#descargarBtn {
-  padding: 12px 25px;
-  font-size: 1em;
-  color: white;
-  background-color: transparent;
-  border: 2px solid var(--rojo-neon);
-  border-radius: 8px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: 0.3s;
-  box-shadow: var(--sombra-neon);
-  display: inline-block;
-}
+    #descargarBtn {
+      padding: 12px 25px;
+      font-size: 1em;
+      color: white;
+      background-color: transparent;
+      border: 2px solid var(--rojo-neon);
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: var(--sombra-neon);
+      display: inline-block;
+    }
 
     #descargarBtn:hover {
       background-color: var(--rojo-neon);
@@ -129,11 +132,83 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    /* Menú actualizaciones */
+  .menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: none;
+    z-index: 2;
+  }
+
+  #menuBtn {
+    background-color: black;
+    border: 2px solid var(--rojo-neon);
+    color: white;
+    padding: 12px 30px; /* más padding para aumentar el ancho */
+    min-width: 180px;   /* ancho mínimo más grande */
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    box-shadow: var(--sombra-neon);
+    transition: background-color 0.3s;
+    text-align: center;
+  }
+
+  #menuBtn:hover {
+    background-color: var(--rojo-neon);
+    color: black;
+    border-radius: 8px;
+  }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 45px;
+      right: 0;
+      background-color: #111;
+      border: 2px solid var(--rojo-neon);
+      border-radius: 8px;
+      box-shadow: var(--sombra-neon);
+      padding: 10px;
+      min-width: 200px;
+    }
+
+    .dropdown-content a {
+      color: white;
+      padding: 8px 12px;
+      text-decoration: none;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .dropdown-content a:hover {
+    background-color: black;
+    border: 2px solid var(--rojo-neon);
+    color: white;
+    padding: 10px 30px; /* más padding para aumentar el ancho */
+    min-width: 180px;   /* ancho mínimo más grande */
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    box-shadow: var(--sombra-neon);
+    transition: background-color 0.3s;
+    text-align: center;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Logo del servidor de Minecraft -->
+  <!-- Menú desplegable (inicialmente oculto) -->
+  <div id="menuActualizaciones" class="menu">
+    <button id="menuBtn">🡳 Actualizaciones</button>
+    <div id="dropdown" class="dropdown-content">
+      <a href="https://cdn.discordapp.com/attachments/1289700942316441700/1386034638098530405/update-21-06-25.exe?ex=68583cd9&is=6856eb59&hm=e9f39af95750681cbbb253a00cb73e419a14485b7b7bf87b0443a0fdb6d714db&" download>21/06/2025</a>
+    </div>
+  </div>
+
+  <!-- Logo del servidor -->
   <img id="logoMC" src="./src/logo.png" alt="Logo del servidor">
 
   <!-- Cuenta atrás -->
@@ -159,6 +234,9 @@
 
     const countdownEl = document.getElementById("countdown");
     const contenidoFinalEl = document.getElementById("contenidoFinal");
+    const menuEl = document.getElementById("menuActualizaciones");
+    const menuBtn = document.getElementById("menuBtn");
+    const dropdown = document.getElementById("dropdown");
 
     function actualizarCuentaAtras() {
       const ahora = DateTime.now().setZone('Europe/Madrid');
@@ -168,6 +246,7 @@
         countdownEl.style.display = "none";
         contenidoFinalEl.style.display = "block";
         contenidoFinalEl.style.animation = "aparecer 1s ease-out forwards";
+        menuEl.style.display = "block";
         clearInterval(intervalo);
         return;
       }
@@ -179,6 +258,10 @@
 
       countdownEl.innerHTML = `Faltan ${dias} días, ${horas} horas, ${minutos} minutos y ${segundos} segundos.`;
     }
+
+    menuBtn.addEventListener("click", () => {
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    });
 
     const intervalo = setInterval(actualizarCuentaAtras, 1000);
     actualizarCuentaAtras();
